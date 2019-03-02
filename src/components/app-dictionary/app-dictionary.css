@@ -1,0 +1,17 @@
+
+ .noob {
+    background: dodgerblue;
+    color: white;
+    padding: 10px; 
+    /* width: 50%; */ 
+ }
+
+.noobie {
+    background: chocolate;
+    color: white;
+    padding: 50px;
+    width: 70%;
+    margin-left: 15%;
+ }
+
+
