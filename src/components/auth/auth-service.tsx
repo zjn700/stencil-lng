@@ -63,14 +63,16 @@ export class AuthService {
     logout(event) {
         console.log(event)
         this.userPhoto = "/assets/icon/icon.png"
+        user = null
+        this.authStateChanged.emit(user);
+        setAuthUser({ displayName: "null" })
+
         // loggedin = false;
 
         firebase.auth().signOut().then(function () {
             // Sign-out successful.
             console.log("signedout")
-            user = null
-            setAuthUser({ displayName: "null" })
-            this.authStateChanged.emit(user);
+            // user = null
 
             // this.userPhoto = "/assets/icon/icon.png"
 
