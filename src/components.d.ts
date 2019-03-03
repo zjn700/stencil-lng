@@ -16,12 +16,14 @@ export namespace Components {
   interface AppDictionary {
     'config': any;
     'items': any;
+    'shown': boolean;
     'test': String;
     'userPhoto2': any;
   }
   interface AppDictionaryAttributes extends StencilHTMLAttributes {
     'config'?: any;
     'items'?: any;
+    'shown'?: boolean;
     'test'?: String;
     'userPhoto2'?: any;
   }
@@ -37,9 +39,11 @@ export namespace Components {
   }
 
   interface AppProfile {
+    'authUser': any;
     'name': string;
   }
   interface AppProfileAttributes extends StencilHTMLAttributes {
+    'authUser'?: any;
     'name'?: string;
   }
 
@@ -49,13 +53,18 @@ export namespace Components {
   interface AuthService {
     'changed': any;
     'config': any;
-    'userx': any;
   }
   interface AuthServiceAttributes extends StencilHTMLAttributes {
     'changed'?: any;
     'config'?: any;
     'onAuthStateChanged'?: (event: CustomEvent) => void;
-    'userx'?: any;
+  }
+
+  interface AppMain {
+    'section': any;
+  }
+  interface AppMainAttributes extends StencilHTMLAttributes {
+    'section'?: any;
   }
 }
 
@@ -67,6 +76,7 @@ declare global {
     'AppProfile': Components.AppProfile;
     'AppRoot': Components.AppRoot;
     'AuthService': Components.AuthService;
+    'AppMain': Components.AppMain;
   }
 
   interface StencilIntrinsicElements {
@@ -76,6 +86,7 @@ declare global {
     'app-profile': Components.AppProfileAttributes;
     'app-root': Components.AppRootAttributes;
     'auth-service': Components.AuthServiceAttributes;
+    'app-main': Components.AppMainAttributes;
   }
 
 
@@ -115,6 +126,12 @@ declare global {
     new (): HTMLAuthServiceElement;
   };
 
+  interface HTMLAppMainElement extends Components.AppMain, HTMLStencilElement {}
+  var HTMLAppMainElement: {
+    prototype: HTMLAppMainElement;
+    new (): HTMLAppMainElement;
+  };
+
   interface HTMLElementTagNameMap {
     'app-dictionary': HTMLAppDictionaryElement
     'app-home': HTMLAppHomeElement
@@ -122,6 +139,7 @@ declare global {
     'app-profile': HTMLAppProfileElement
     'app-root': HTMLAppRootElement
     'auth-service': HTMLAuthServiceElement
+    'app-main': HTMLAppMainElement
   }
 
   interface ElementTagNameMap {
@@ -131,6 +149,7 @@ declare global {
     'app-profile': HTMLAppProfileElement;
     'app-root': HTMLAppRootElement;
     'auth-service': HTMLAuthServiceElement;
+    'app-main': HTMLAppMainElement;
   }
 
 

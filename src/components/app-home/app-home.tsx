@@ -20,7 +20,7 @@ export class AppHome {
     console.log(var1, var2)
     console.log('will load', authUser)
     this.doThis()
-    this.authUser = getAuthUser();
+    this.authUser = getAuthUser("home - will load");
     // setUserVal('z')
   }
   componentWillUpdate() { console.log('will update', authUser) }
@@ -28,10 +28,11 @@ export class AppHome {
   componentDidUpdate() { console.log('did update', authUser) }
   componentDidUnload() { console.log('did unload', authUser) }
 
-  doThis() { console.log("get auth user", getAuthUser().displayName) }
+  doThis() { console.log("get auth user", getAuthUser("home - do this").displayName) }
 
   render() {
     return [
+
       <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Home</ion-title>
@@ -46,9 +47,9 @@ export class AppHome {
           check out our docs on <a href="https://stenciljs.com">stenciljs.com</a> to get started.
         </p>
         <ion-grid fixed>
-          <h1>{getAuthUser().displayName}</h1>
+          <h1>{getAuthUser("home - render").displayName}</h1>
 
-          <ion-button href="/profile/ionic" expand="block">Profile page</ion-button>
+          <ion-button href="/profile/profile" expand="block">Profile page</ion-button>
           {/* <ion-button href="/profile-dupe/Krika" expand="block">Profile Dupe page</ion-button>
           <ion-button href="/dictionary" expand="block">Dictionary</ion-button> */}
           <ion-button href="/login" expand="block">Login</ion-button>

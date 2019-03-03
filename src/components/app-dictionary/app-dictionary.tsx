@@ -12,6 +12,8 @@ import 'firebase/auth';
     styleUrl: 'app-dictionary.css'
 })
 export class AppDictonary {
+    @State() hidden: boolean = false
+    @Prop() shown: boolean = true
     @State() changed: boolean = false;
     // @Prop() items = [1, 2, 3, 4, 5, 6, 7, { name: "joe" }]
     @Prop() items = [{ name: "Joe" }, { name: "Joe" }, { name: "Joe" }, { name: "Joe" }]
@@ -132,7 +134,7 @@ export class AppDictonary {
             //     </ion-toolbar>
             // </ion-header>
 
-            <ion-header>
+            <ion-header class={this.hidden ? "hidden" : "shown"} >
                 <ion-toolbar color="primary">
                     <ion-buttons slot="start">
                         <ion-back-button defaultHref="/" />

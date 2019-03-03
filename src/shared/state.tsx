@@ -8,6 +8,7 @@ export function setAuthUser(user) {
     authUser = user
 }
 
-export function getAuthUser() {
+export function getAuthUser(source) {
+    console.log("from: ", source)
     return authUser
 }

@@ -4,9 +4,8 @@ import 'firebase/auth';
 
 import { setAuthUser } from '../../shared/state';
 
-
+// global -may remove with either event-emitter, local-storage or a combo
 let user: any = null;
-// let loggedin: boolean;
 
 @Component({
     tag: 'auth-service',
@@ -15,15 +14,14 @@ let user: any = null;
 export class AuthService {
     @Event() authStateChanged: EventEmitter;
 
-    @Prop() userx: any = "blah"
+    // @Prop() userx: any = "blah"
     @Prop() changed: any
 
     // @State() user: any;
 
     @State() userPhoto: any = '/assets/icon/icon.png'
     userEmail: any = null
-    userTest: any = "songza"
-    // @State() loggedin: boolean;
+    // userTest: any = "songza"
 
 
 
@@ -37,19 +35,13 @@ export class AuthService {
     };
 
     checkUserStatus() {
-        // if
-        // await firebase.auth().onAuthStateChanged((user) => {
-
+        // check is firebase for initialized, if not, then do
         console.log(firebase.apps.length);
-
         if (firebase.apps.length) {
-            // User is signed in.
             console.log("firebase initialized", user)
         } else {
-            // No user is signed in.
             console.log("firebase not yet initailized")
             firebase.initializeApp(this.config);
-
         }
     }
     componentWillLoad() {
@@ -61,49 +53,44 @@ export class AuthService {
 
     }
     logout(event) {
-        console.log(event)
+        console.log("logging out", event)
+        // want to do these after firebase signout function, but was getting errors
         this.userPhoto = "/assets/icon/icon.png"
         user = null
         this.authStateChanged.emit(user);
         setAuthUser({ displayName: "null" })
 
-        // loggedin = false;
-
         firebase.auth().signOut().then(function () {
-            // Sign-out successful.
-            console.log("signedout")
-            // user = null
-
-            // this.userPhoto = "/assets/icon/icon.png"
-
+            console.log("now signedout")
         }).catch(function (error) {
-            // An error happened.
             console.log(error)
         });
     }
     login(event) {
         console.log("event", event)
-        // loggedin = true;
-
-        // firebase.initializeApp(this.config);
         if (!user) {
+
             console.log(firebase.apps.length)
 
             let provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider).then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 // var token = result.credential.accessToken;
+
                 // The signed-in user info.
                 console.log("result", result);
-                // loggedin = true;
+                console.log("google credential", result.credential);
 
+                // 3 state functions, find the one that works best
                 user = result.user;
                 setAuthUser(result.user)
                 this.authStateChanged.emit(user);
+
+                // user interface items
                 this.userPhoto = user.photoURL
-                console.log(this.userPhoto)
                 this.userEmail = user.email
                 console.log(this.userPhoto, this.userEmail)
+
             }).catch(function (error) {
                 // Handle Errors here.
                 console.log("ERROR:", error)
@@ -116,27 +103,44 @@ export class AuthService {
     render() {
 
         return [
-            // <h1>{this.userx} - {this.changed}</h1>
+            // <ion-header>
+            //     <ion-toolbar color="primary">
+            //         <ion-buttons slot="start">
+            //             <ion-back-button defaultHref="/" />
+            //             {/* <ion-button expand="block" href="/">
+            //                 <ion-icon name="arrow-back"></ion-icon>
+            //             </ion-button> */}
+
+            //         </ion-buttons>
+            //         <ion-title>Login</ion-title>
+            //     </ion-toolbar>
+            // </ion-header>,
+            // <ion-header>
+            //     <ion-button href="/" expand="block">home</ion-button>
+            // </ion-header>,
             <ion-header>
                 <ion-toolbar color="primary">
                     <ion-buttons slot="start">
-                        <ion-back-button defaultHref="/" />
-                        <ion-button expand="block" href="/">
-                            <ion-icon name="arrow-back"></ion-icon>
-                        </ion-button>
-
+                        <ion-button href="/main/profile" expand="block"><ion-icon name="arrow-back"></ion-icon></ion-button>
+                        {/* <ion-button href="/" expand="block">home</ion-button> */}
                     </ion-buttons>
-                    <ion-title>Login</ion-title>
                 </ion-toolbar>
             </ion-header>,
-
             <ion-content padding>
-                <ion-button class={'auth-' + (user ? 'hidden' : 'showing')} onClick={(event: UIEvent) => this.login(event)} expand="block">LOgin</ion-button>
-                <ion-button class={'auth-' + (user ? 'showing' : 'hidden')} onClick={(event: UIEvent) => this.logout(event)} expand="block">Logout</ion-button>
+                {/* <ion-header>
+                    <ion-toolbar>
+                        <ion-button href="/main" expand="block">main</ion-button>
+                        <ion-button href="/" expand="block">home</ion-button>
+                    </ion-toolbar>
+                </ion-header> */}
 
-                <h2>{this.changed}</h2>
+                <ion-card>
+                    <ion-button class={'auth-' + (user ? 'hidden' : 'showing')} onClick={(event: UIEvent) => this.login(event)} >LOgin</ion-button>
+                    <ion-button class={'auth-' + (user ? 'showing' : 'hidden')} onClick={(event: UIEvent) => this.logout(event)} >Logout</ion-button>
 
-                <app-dictionary userPhoto2={this.userPhoto}></app-dictionary>
+                    <h2>Changed??? {this.changed}</h2>
+                </ion-card>
+                {/* <app-dictionary userPhoto2={this.userPhoto}></app-dictionary> */}
 
             </ion-content>
         ]

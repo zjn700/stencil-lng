@@ -39,11 +39,13 @@ export class AppRoot {
     return (
       <ion-app>
         <ion-router useHash={false}>
-          <ion-route url="/" component="app-home" />
+
           <ion-route url="/profile/:name" component="app-profile" />
           {/* <ion-route url="/profile-dupe/:name" component="app-profile-dupe" />
           <ion-route url="/dictionary" component="app-dictionary" /> */}
           <ion-route url="/login" component="auth-service" />
+          <ion-route url="/" component="app-main" />
+          <ion-route url="/main/:section" component="app-main" />
         </ion-router>
         <ion-nav />
       </ion-app>

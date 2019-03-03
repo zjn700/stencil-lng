@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import { sayHello } from '../../helpers/utils';
-import { getAuthUser } from '../../shared/state';
+import { getAuthUser, authUser } from '../../shared/state';
 
 @Component({
   tag: 'app-profile',
@@ -8,10 +8,18 @@ import { getAuthUser } from '../../shared/state';
 })
 export class AppProfile {
 
+  @State() hidden: boolean = false
+  // @State() authUser: any
   @State() state = false;
   @Prop() name: string;
+  // @Prop({ mutable: true }) @State() authUser: any
+  @Prop({ mutable: true }) authUser: any
+  // @State() authUser
 
-  componentWillLoad() { console.log('her', getAuthUser()) }
+  componentWillLoad() {
+    this.authUser = getAuthUser("from profile will load")
+    console.log("authUser this", this.authUser, "state authuser", authUser)
+  }
 
   formattedName(): string {
     if (this.name) {
@@ -22,12 +30,22 @@ export class AppProfile {
 
   render() {
     return [
-      <ion-header>
+      // <ion-header>
+      //   <ion-toolbar color="primary">
+      //     <ion-buttons slot="start">
+      //       <ion-back-button defaultHref="/" />
+      //     </ion-buttons>
+      //     <ion-title>Profile 2: {getAuthUser().displayName} - {this.name}</ion-title>
+      //   </ion-toolbar>
+      // </ion-header>,
+      <ion-header class={this.hidden ? "hidden" : "shown"}>
         <ion-toolbar color="primary">
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="/" />
+            <ion-button href="/main/dictionary" expand="block"><ion-icon name="arrow-back"></ion-icon></ion-button>
+            {/* <ion-button href="/" expand="block">home</ion-button> */}
           </ion-buttons>
-          <ion-title>Profile 2: {getAuthUser().displayName} - {this.name}</ion-title>
+          <ion-title>Profile: {getAuthUser("profile render").displayName}</ion-title>
+
         </ion-toolbar>
       </ion-header>,
 
