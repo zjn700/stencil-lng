@@ -1,14 +1,19 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, Event, EventEmitter } from '@stencil/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import { setAuthUser } from '../../shared/state';
+
+
 let user: any = null;
+// let loggedin: boolean;
 
 @Component({
     tag: 'auth-service',
-    styleUrl: 'todo-list.css'
+    styleUrl: 'auth-service.css'
 })
 export class AuthService {
+    @Event() authStateChanged: EventEmitter;
 
     @Prop() userx: any = "blah"
     @Prop() changed: any
@@ -18,6 +23,7 @@ export class AuthService {
     @State() userPhoto: any = '/assets/icon/icon.png'
     userEmail: any = null
     userTest: any = "songza"
+    // @State() loggedin: boolean;
 
 
 
@@ -57,10 +63,15 @@ export class AuthService {
     logout(event) {
         console.log(event)
         this.userPhoto = "/assets/icon/icon.png"
+        // loggedin = false;
+
         firebase.auth().signOut().then(function () {
             // Sign-out successful.
             console.log("signedout")
             user = null
+            setAuthUser({ displayName: "null" })
+            this.authStateChanged.emit(user);
+
             // this.userPhoto = "/assets/icon/icon.png"
 
         }).catch(function (error) {
@@ -70,6 +81,8 @@ export class AuthService {
     }
     login(event) {
         console.log("event", event)
+        // loggedin = true;
+
         // firebase.initializeApp(this.config);
         if (!user) {
             console.log(firebase.apps.length)
@@ -80,8 +93,11 @@ export class AuthService {
                 // var token = result.credential.accessToken;
                 // The signed-in user info.
                 console.log("result", result);
+                // loggedin = true;
 
                 user = result.user;
+                setAuthUser(result.user)
+                this.authStateChanged.emit(user);
                 this.userPhoto = user.photoURL
                 console.log(this.userPhoto)
                 this.userEmail = user.email
@@ -103,14 +119,18 @@ export class AuthService {
                 <ion-toolbar color="primary">
                     <ion-buttons slot="start">
                         <ion-back-button defaultHref="/" />
+                        <ion-button expand="block" href="/">
+                            <ion-icon name="arrow-back"></ion-icon>
+                        </ion-button>
+
                     </ion-buttons>
                     <ion-title>Login</ion-title>
                 </ion-toolbar>
             </ion-header>,
 
             <ion-content padding>
-                <ion-button onClick={(event: UIEvent) => this.login(event)} expand="block">LOgin</ion-button>
-                <ion-button onClick={(event: UIEvent) => this.logout(event)} expand="block">Logout</ion-button>
+                <ion-button class={'auth-' + (user ? 'hidden' : 'showing')} onClick={(event: UIEvent) => this.login(event)} expand="block">LOgin</ion-button>
+                <ion-button class={'auth-' + (user ? 'showing' : 'hidden')} onClick={(event: UIEvent) => this.logout(event)} expand="block">Logout</ion-button>
 
                 <h2>{this.changed}</h2>
 

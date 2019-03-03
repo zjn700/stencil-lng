@@ -54,6 +54,7 @@ export namespace Components {
   interface AuthServiceAttributes extends StencilHTMLAttributes {
     'changed'?: any;
     'config'?: any;
+    'onAuthStateChanged'?: (event: CustomEvent) => void;
     'userx'?: any;
   }
 }

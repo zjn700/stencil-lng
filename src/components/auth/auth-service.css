@@ -1,0 +1,13 @@
+.auth-hidden {
+    display: none;
+}
+
+.auth-showing {
+    display:block;
+}
+
+/* .button-inner {
+    font-size: 16px;
+} */
+
+/* .sc-ion-buttons-md-s ion-button */
