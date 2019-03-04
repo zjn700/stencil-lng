@@ -1,4 +1,5 @@
 import { Component, Prop, State, Event, EventEmitter } from '@stencil/core';
+
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -13,12 +14,8 @@ let user: any = null;
 })
 export class AuthService {
     @Event() authStateChanged: EventEmitter;
-
-    // @Prop() userx: any = "blah"
+    @Prop({ mutable: true }) authUser: any
     @Prop() changed: any
-
-    // @State() user: any;
-
     @State() userPhoto: any = '/assets/icon/icon.png'
     userEmail: any = null
     // userTest: any = "songza"
@@ -45,20 +42,28 @@ export class AuthService {
         }
     }
     componentWillLoad() {
+        console.log('auth will load', this.authUser)
         this.checkUserStatus();
         if (user) {
             console.log(user)
             this.userPhoto = user.photoURL
         }
-
     }
+    componentWillUpdate() { console.log('auth will update', this.authUser) }
+    componentDidLoad() { console.log('auth did load', this.authUser) }
+    componentDidUpdate() { console.log('auth did update', this.authUser) }
+    componentDidUnload() { console.log('auth did unload', this.authUser) }
+
+
     logout(event) {
         console.log("logging out", event)
         // want to do these after firebase signout function, but was getting errors
         this.userPhoto = "/assets/icon/icon.png"
         user = null
+        this.authUser = user;
+        setAuthUser(user)
+
         this.authStateChanged.emit(user);
-        setAuthUser({ displayName: "null" })
 
         firebase.auth().signOut().then(function () {
             console.log("now signedout")
@@ -83,6 +88,7 @@ export class AuthService {
 
                 // 3 state functions, find the one that works best
                 user = result.user;
+                this.authUser = user;
                 setAuthUser(result.user)
                 this.authStateChanged.emit(user);
 
@@ -121,7 +127,7 @@ export class AuthService {
             <ion-header>
                 <ion-toolbar color="primary">
                     <ion-buttons slot="start">
-                        <ion-button href="/main/profile" expand="block"><ion-icon name="arrow-back"></ion-icon></ion-button>
+                        <ion-button href="/main" expand="block"><ion-icon name="arrow-back"></ion-icon></ion-button>
                         {/* <ion-button href="/" expand="block">home</ion-button> */}
                     </ion-buttons>
                 </ion-toolbar>
@@ -135,8 +141,13 @@ export class AuthService {
                 </ion-header> */}
 
                 <ion-card>
+                    {/* <ion-nav-pop> */}
+                    {/* <ion-nav-push component="app-main"> */}
+
                     <ion-button class={'auth-' + (user ? 'hidden' : 'showing')} onClick={(event: UIEvent) => this.login(event)} >LOgin</ion-button>
                     <ion-button class={'auth-' + (user ? 'showing' : 'hidden')} onClick={(event: UIEvent) => this.logout(event)} >Logout</ion-button>
+
+                    {/* </ion-nav-push> */}
 
                     <h2>Changed??? {this.changed}</h2>
                 </ion-card>

@@ -14,18 +14,22 @@ import 'ionicons';
 export namespace Components {
 
   interface AppDictionary {
+    'authUser': any;
     'config': any;
+    'displayName': any;
     'items': any;
     'shown': boolean;
     'test': String;
-    'userPhoto2': any;
+    'userPhoto': any;
   }
   interface AppDictionaryAttributes extends StencilHTMLAttributes {
+    'authUser'?: any;
     'config'?: any;
+    'displayName'?: any;
     'items'?: any;
     'shown'?: boolean;
     'test'?: String;
-    'userPhoto2'?: any;
+    'userPhoto'?: any;
   }
 
   interface AppHome {}
@@ -51,19 +55,23 @@ export namespace Components {
   interface AppRootAttributes extends StencilHTMLAttributes {}
 
   interface AuthService {
+    'authUser': any;
     'changed': any;
     'config': any;
   }
   interface AuthServiceAttributes extends StencilHTMLAttributes {
+    'authUser'?: any;
     'changed'?: any;
     'config'?: any;
     'onAuthStateChanged'?: (event: CustomEvent) => void;
   }
 
   interface AppMain {
+    'authUser': any;
     'section': any;
   }
   interface AppMainAttributes extends StencilHTMLAttributes {
+    'authUser'?: any;
     'section'?: any;
   }
 }

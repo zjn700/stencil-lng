@@ -45,6 +45,7 @@ export class AppRoot {
           <ion-route url="/dictionary" component="app-dictionary" /> */}
           <ion-route url="/login" component="auth-service" />
           <ion-route url="/" component="app-main" />
+          <ion-route url="/main" component="app-main" />
           <ion-route url="/main/:section" component="app-main" />
         </ion-router>
         <ion-nav />

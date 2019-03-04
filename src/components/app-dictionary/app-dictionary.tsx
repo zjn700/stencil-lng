@@ -4,6 +4,7 @@ import { Component, Prop, State } from '@stencil/core';
 // import * as firebase from 'firebase/app';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { getAuthUser } from '../../shared/state';
 
 // (anonymous) @app-dictionary.md.entry.js: 47780
 
@@ -12,6 +13,11 @@ import 'firebase/auth';
     styleUrl: 'app-dictionary.css'
 })
 export class AppDictonary {
+
+    // @Prop({ mutable: true }) authUser: any
+    // @State() authUser: any
+
+
     @State() hidden: boolean = false
     @Prop() shown: boolean = true
     @State() changed: boolean = false;
@@ -23,11 +29,17 @@ export class AppDictonary {
     toastCtrl: HTMLIonToastControllerElement;
 
     @State() user: any;
-    userPhoto: any = '/assets/icon/icon.png'
-    @Prop({ mutable: true }) @State() userPhoto2: any
+    userPhotoDefault: any = '/assets/icon/icon.png'
+    // @Prop({ mutable: true }) userPhoto: any
+    @Prop() userPhoto: any
+    @Prop() displayName: any
+    @Prop({ mutable: true }) authUser: any
+
+
+    // @Prop({ mutable: true }) @State() userPhoto: any
     userTest: any = "songza"
     userEmail: any = null
-    // @Watch('userPhoto2')
+    // @Watch('userPhoto')
     // watchHandler(newValue: any, oldValue: any) {
     //     console.log('The new value of activated is: ', newValue, oldValue);
     // }
@@ -41,7 +53,18 @@ export class AppDictonary {
         messagingSenderId: "139743657138"
     };
 
+    componentWillLoad() {
 
+        console.log('dict will load 1', this.userPhoto, this.authUser);
+        this.authUser = getAuthUser("from profile will load")
+        // this.userPhoto = (this.authUser.loggedIn) ? this.authUser.photoURL : this.userPhotoDefault
+        console.log('dict will load 222222', this.authUser.photoURL);
+
+    }
+    componentWillUpdate() { console.log('dict will update', this.userPhoto, this.authUser) }
+    componentDidLoad() { console.log('dict did load', this.userPhoto, this.authUser) }
+    componentDidUpdate() { console.log('dict did update', this.userPhoto, this.authUser) }
+    componentDidUnload() { console.log('dict did unload', this.userPhoto, this.authUser) }
 
     showToast(event: UIEvent): any {
 
@@ -112,10 +135,7 @@ export class AppDictonary {
             }
         });
     }
-    componentWillLoad() {
 
-        // this.checkUserStatus();
-    }
 
     render() {
         // if (this.user) {
@@ -148,6 +168,25 @@ export class AppDictonary {
 
                 <ion-toast-controller></ion-toast-controller>
                 <ion-button onClick={(event: UIEvent) => this.showToast(event)} expand="block">Taost</ion-button>
+                <ion-grid>
+                    <ion-row>
+                        {this.authUser.photoURL}
+                        {/* <ion-img src={this.authUser.photoURL}></ion-img> */}
+                        <ion-img src={this.userPhoto}></ion-img>
+                    </ion-row>
+                    <ion-row>
+                        {/* <ion-col col-6 col-md-4> */}
+                        {this.items.map((item) =>
+                            <ion-col>
+                                <ion-card class="noob">Name {item.name}</ion-card>
+                            </ion-col>
+
+
+                        )}
+                        {/* </ion-col> */}
+                    </ion-row>
+
+                </ion-grid>
 
                 <ion-grid fixed>
                     <ion-list>
@@ -159,7 +198,6 @@ export class AppDictonary {
                         <ion-item>Item 5</ion-item>
                     </ion-list>
                 </ion-grid>
-                <ion-img src={this.userPhoto2}></ion-img>
 
 
                 {/* <ion-button href="/profile/ionic" expand="block">Profile page</ion-button>
@@ -174,18 +212,7 @@ export class AppDictonary {
                 {/* <ion-card>xxx {this.items}</ion-card> */}
 
 
-                <ion-grid>
-                    <ion-row>
-                        {/* <ion-col col-6 col-md-4> */}
-                        {this.items.map((item) =>
-                            <ion-col>
-                                <ion-card class="noob">Name {item.name}</ion-card>
-                            </ion-col>
 
-                        )}
-                        {/* </ion-col> */}
-                    </ion-row>
-                </ion-grid>
                 {/* 
                 <ion-grid>
                     {this.items.map((item) =>
